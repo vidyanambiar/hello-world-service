@@ -10,6 +10,9 @@ To run with docker:
 2. Run `make docker-build`
 3. Run `make docker-run`
 
+Unit test:
+Run `make test`
+
 To push out to a quay.io repo:
 1. docker login with encrypted CLI password from quay.io:
 ```
