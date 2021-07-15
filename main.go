@@ -11,9 +11,9 @@ func helloWorld(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	// Register handler function on server route
+    // Register handler function on server route
     http.HandleFunc("/", helloWorld)
-	
+
     fmt.Println("Listening on localhost:8080")
     http.ListenAndServe(":8080", nil)
 }

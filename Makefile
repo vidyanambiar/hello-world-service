@@ -6,6 +6,7 @@ build:
 run:
 	go run main.go
 
+# Docker build, push and run
 docker-build:
 	docker build --tag ${IMG} .
 
@@ -14,3 +15,6 @@ docker-push:
 
 docker-run:
 	docker run --publish 8080:8080 hello-world-service
+
+test:
+	go test
