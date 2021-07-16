@@ -12,7 +12,7 @@ func helloWorld(w http.ResponseWriter, r *http.Request) {
 
 func main() {
     // Register handler function on server route
-    http.HandleFunc("/", helloWorld)
+    http.HandleFunc("/api/hello-world-service/v0/ping", helloWorld)
 
     fmt.Println("Listening on localhost:8080")
     http.ListenAndServe(":8080", nil)

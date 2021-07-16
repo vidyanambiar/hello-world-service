@@ -8,7 +8,7 @@ import (
 
 func TestHelloWorldHandler(t *testing.T) {
 	// Create a request to pass to the handler
-	req, err := http.NewRequest("GET", "/", nil);
+	req, err := http.NewRequest("GET", "/api/hello-world-service/v0/ping", nil);
 
 	if err != nil {
 		t.Error("Received error in response", err);

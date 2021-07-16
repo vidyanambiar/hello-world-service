@@ -1,6 +1,6 @@
 # hello-world-service
 
-A simple HTTP server that serves "Hello world" on https://localhost:8080
+A simple HTTP server that serves "Hello world" on http://localhost:8080/api/hello-world-service/v0/ping
 
 **To run without docker:**
 1. Install Golang 1.15.
