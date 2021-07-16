@@ -8,9 +8,14 @@ run:
 
 # Docker build, push and run
 docker-build:
+# Base image for go is pulled from registry.redhat.io
+	docker login -u="${RH_REGISTRY_USER}" -p="${RH_REGISTRY_TOKEN}" registry.redhat.io
 	docker build --tag ${IMG} .
 
 docker-push:
+	docker login -u="${QUAY_USER}" -p="${QUAY_TOKEN}" quay.io
+	echo ${IMG}
+	$(MAKE) docker-build
 	docker push ${IMG}
 
 docker-run:

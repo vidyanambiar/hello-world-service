@@ -1,16 +1,15 @@
 # Set the base image as the official Go image that already has all the tools and packages to compile and run a Go application
-FROM golang:1.16-alpine
+FROM registry.redhat.io/rhel8/go-toolset:1.15 AS builder
 
 # Set the current working directory inside the container
-WORKDIR /app
+WORKDIR $GOPATH/src/mypackage/myapp/
 
-# Copy modules into the working directory
-COPY go.mod .
-# Install modules within the working directory in the container
-RUN go mod download
+COPY . .
 
-# Copy source code into the image
-COPY *.go .
+# Fetch dependencies.
+# Using go get requires root.
+USER root
+RUN go get -d -v
 
 # Compile the application
 RUN go build -o /hello-world-service
