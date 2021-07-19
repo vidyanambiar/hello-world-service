@@ -16,11 +16,11 @@ A simple HTTP server that serves "Hello world" on http://localhost:8080/api/hell
 
 **Testing and Linting:**
 
-*Run unit tests with:*
+*Unit tests:*
 ```
 make test
 ```
-*lint*:
+*Lint*:
 ```
 make lint
 ```
