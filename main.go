@@ -3,17 +3,26 @@ package main
 import (
 	"fmt"
 	"net/http"
+
+	chi "github.com/go-chi/chi/v5"
+	middleware "github.com/go-chi/chi/v5/middleware"
 )
 
 // Handler function that responds with Hello World
 func helloWorld(w http.ResponseWriter, r *http.Request) {
-    fmt.Fprintf(w, "Hello world")
+    fmt.Fprint(w, "Hello world")
 }
 
 func main() {
-    // Register handler function on server route
-    http.HandleFunc("/api/hello-world-service/v0/ping", helloWorld)
+    // Initialize router
+	r := chi.NewRouter()
+	r.Use(middleware.Logger)
+
+    // Register handler functions on server routes
+	r.Get("/api/hello-world-service/v0/ping", helloWorld)
 
     fmt.Println("Listening on localhost:8080")
-    http.ListenAndServe(":8080", nil)
+
+    // Listen and serve using the router
+    http.ListenAndServe(":8080", r)
 }
