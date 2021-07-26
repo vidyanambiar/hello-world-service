@@ -32,3 +32,7 @@ staticcheck:
 
 lint: vet staticcheck
 # Note: The Golint linter is deprecated and frozen. As per the docs (https://github.com/golang/lint) there's no drop-in replacement for it, but tools such as Staticcheck and go vet should be used instead.
+
+# Open API 3.0 Spec
+generate-docs:
+	go run cmd/spec/main.go

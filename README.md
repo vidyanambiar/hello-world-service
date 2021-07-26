@@ -31,3 +31,8 @@ make lint
    2. QUAY_TOKEN (quay.io token/ encrypted CLI password)
    3. IMG="quay.io/${QUAY_USER}/hello-world-service:latest"
 2. Run `make docker-push`
+
+**To view the OpenAPI 3.0 spec:**
+
+1. Run `make generate-docs`
+2. See the OpenAPI spec at http://localhost:8080/api/hello-world-service/v0/openapi.json. This can also be viewed in [Swagger Editor](https://editor.swagger.io/).
