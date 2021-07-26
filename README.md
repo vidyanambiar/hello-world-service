@@ -22,6 +22,9 @@ make test
 ```
 *Lint*:
 ```
+go get -u honnef.co/go/tools/cmd/staticcheck@latest
+```
+```
 make lint
 ```
 
@@ -31,3 +34,8 @@ make lint
    2. QUAY_TOKEN (quay.io token/ encrypted CLI password)
    3. IMG="quay.io/${QUAY_USER}/hello-world-service:latest"
 2. Run `make docker-push`
+
+**To view the OpenAPI 3.0 spec:**
+
+1. Run `make generate-docs`
+2. The OpenAPI spec can be retrieved at http://localhost:8080/api/hello-world-service/v0/openapi.json. It can be viewed in the [Swagger Editor](https://editor.swagger.io/).
