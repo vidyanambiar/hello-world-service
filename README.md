@@ -22,6 +22,9 @@ make test
 ```
 *Lint*:
 ```
+go get -u honnef.co/go/tools/cmd/staticcheck@latest
+```
+```
 make lint
 ```
 
@@ -35,4 +38,4 @@ make lint
 **To view the OpenAPI 3.0 spec:**
 
 1. Run `make generate-docs`
-2. See the OpenAPI spec at http://localhost:8080/api/hello-world-service/v0/openapi.json. This can also be viewed in [Swagger Editor](https://editor.swagger.io/).
+2. The OpenAPI spec can be retrieved at http://localhost:8080/api/hello-world-service/v0/openapi.json. It can be viewed in the [Swagger Editor](https://editor.swagger.io/).

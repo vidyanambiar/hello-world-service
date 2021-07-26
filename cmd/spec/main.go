@@ -49,7 +49,8 @@ func main() {
 	checkErr(err)
 
 	paths, err := ioutil.ReadFile("./cmd/spec/path.yaml")
-
+	checkErr(err)
+	
 	b = &bytes.Buffer{}
 	b.Write(schema)
 	b.Write(paths)
