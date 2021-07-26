@@ -13,7 +13,7 @@ paths:
             text/plain:
               schema:
                 type: string
-                example: "ABC"
+                example: "Hello World"
           description: OK
         "400":
           content:
