@@ -27,8 +27,6 @@ components:
         Title:
           type: string
       type: object
-servers:
-  - url: https://localhost:8080/
 info:
   title: hello-world-service
   version: 1.0.0
@@ -44,7 +42,7 @@ paths:
             text/plain:
               schema:
                 type: string
-                example: "ABC"
+                example: "Hello World"
           description: OK
         "400":
           content:
