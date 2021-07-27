@@ -2,7 +2,7 @@
 FROM registry.redhat.io/rhel8/go-toolset:1.15 AS builder
 
 # Set the current working directory inside the container
-WORKDIR $GOPATH/src/mypackage/myapp/
+WORKDIR /app
 
 COPY . .
 
