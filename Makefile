@@ -1,4 +1,4 @@
-IMG ?= hello-world-service:latest
+IMG ?= quay.io/${QUAY_USER}/hello-world-service:latest
 
 build: 
 	go build -o hello-world-service main.go

@@ -2,8 +2,11 @@
 
 A simple HTTP server that serves "Hello world" on http://localhost:8080/api/hello-world-service/v0/ping
 
+---
+#### Getting started:
 **To run without docker:**
-1. Install Golang 1.15.
+
+1. Install Golang 1.15
 2. Run `make run`
 
 **To run with docker:**
@@ -14,28 +17,32 @@ A simple HTTP server that serves "Hello world" on http://localhost:8080/api/hell
 3. Run `make docker-build`
 4. Run `make docker-run`
 
-**Testing and Linting:**
+---
 
-*Unit tests:*
+#### Testing and Linting:
+
+**Unit tests:**
 ```
 make test
 ```
-*Lint*:
+**Lint:**
 ```
 go get -u honnef.co/go/tools/cmd/staticcheck@latest
-```
-```
 make lint
 ```
 
-**To push out to a quay.io repo:**
+---
+#### Pushing the container image to quay.io:
+
 1. Export the following environment variables
    1. QUAY_USER (quay.io user name)
    2. QUAY_TOKEN (quay.io token/ encrypted CLI password)
    3. IMG="quay.io/${QUAY_USER}/hello-world-service:latest"
 2. Run `make docker-push`
 
-**To view the OpenAPI 3.0 spec:**
+---
+#### Viewing the OpenAPI 3.0 spec:
 
-1. Run `make generate-docs`
-2. The OpenAPI spec can be retrieved at http://localhost:8080/api/hello-world-service/v0/openapi.json. It can be viewed in the [Swagger Editor](https://editor.swagger.io/).
+* Run `make generate-docs`
+
+The API will serve the docs under a `/docs` endpoint.
