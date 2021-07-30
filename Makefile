@@ -24,6 +24,9 @@ docker-run:
 test:
 	go test
 
+test-functional:
+	ginkgo -tags functional --v test/functional
+
 vet:
 	go vet ./...
 
