@@ -27,9 +27,6 @@ test:
 functional-test:
 	ginkgo -tags functional --v test/functional
 
-functional-test-full:
-	@build/run-functional-tests.sh
-
 vet:
 	go vet ./...
 
@@ -42,3 +39,4 @@ lint: vet staticcheck
 # OpenAPI 3.0 Spec
 generate-docs:
 	go run cmd/spec/main.go
+	

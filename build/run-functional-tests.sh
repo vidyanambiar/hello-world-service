@@ -12,5 +12,5 @@ sleep 2
 
 # Shutdown server
 kill -s SIGINT -$APP_PID
-wait $APP_PID
+wait
 echo "*** Stopped API server"
