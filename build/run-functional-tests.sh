@@ -7,7 +7,7 @@ export APP_PID=$!
 sleep 2
 
 # Run functional tests
-make test-functional &
+make functional-test &
 sleep 2
 
 # Shutdown server
