@@ -35,4 +35,4 @@ jobs:
       run: make test
       
     - name: Functional Test
-      run: build/run-functional-tests.sh
+      run: . build/run-functional-tests.sh
