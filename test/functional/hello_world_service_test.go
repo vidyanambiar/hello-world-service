@@ -1,7 +1,7 @@
 package main_test
 
 import (
-	"io"
+	"io/ioutil"
 	"net/http"
 	"os"
 
@@ -33,7 +33,7 @@ var _ = Describe("HelloWorldService", func() {
 		It ("/api/hello-world-service/v0/ping serves up Hello World", func () {
 			expectedResponse := "Hello world"
 			defer resp.Body.Close()
-			body, err := io.ReadAll(resp.Body)
+			body, err := ioutil.ReadAll(resp.Body)
 			Expect(string(body)).To(Equal(expectedResponse))
 			Expect(err).NotTo(HaveOccurred())
 		})				
