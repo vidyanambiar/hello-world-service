@@ -47,10 +47,10 @@ deploy-app:
 	bonfire deploy idp-configs-api -n $(NAMESPACE)
 
 scale-down:
-	$(KUBECTL) scale --replicas=0 deployment/idp-configs-api-app -n $(NAMESPACE)
+	$(KUBECTL) scale --replicas=0 deployment/idp-configs-api-service -n $(NAMESPACE)
 
 scale-up:
-	$(KUBECTL) scale --replicas=1 deployment/idp-configs-api-app -n $(NAMESPACE)
+	$(KUBECTL) scale --replicas=1 deployment/idp-configs-api-service -n $(NAMESPACE)
 
 restart-app:
 	$(MAKE) scale-down NAMESPACE=$(NAMESPACE)
