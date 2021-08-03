@@ -1,7 +1,16 @@
-IMG ?= quay.io/${QUAY_USER}/hello-world-service:latest
+IMG ?= quay.io/${QUAY_USER}/idp-configs-api:latest
+
+UNAME_S := $(shell uname -s)
+OS_SED :=
+ifeq ($(UNAME_S),Darwin)
+	OS_SED += ""
+endif
+
+KUBECTL=kubectl
+NAMESPACE=test-cl
 
 build: 
-	go build -o hello-world-service main.go
+	go build -o idp-configs-api main.go
 
 run:
 	go run main.go
@@ -19,7 +28,34 @@ docker-push:
 	docker push ${IMG}
 
 docker-run:
-	docker run --publish 8080:8080 hello-world-service
+	docker run --publish 8080:8080 idp-configs-api
+
+bonfire-config-local:
+	@cp default_config.yaml.local.example config.yaml
+	@sed -i ${OS_SED} 's|REPO|$(PWD)|g' config.yaml
+
+bonfire-config-github:
+	@cp default_config.yaml.github.example config.yaml
+
+create-ns:
+	$(KUBECTL) create ns $(NAMESPACE)
+
+deploy-env:
+	bonfire deploy-env -n $(NAMESPACE)
+
+deploy-app:
+	bonfire deploy idp-configs-api -n $(NAMESPACE)
+
+scale-down:
+	$(KUBECTL) scale --replicas=0 deployment/idp-configs-api-app -n $(NAMESPACE)
+
+scale-up:
+	$(KUBECTL) scale --replicas=1 deployment/idp-configs-api-app -n $(NAMESPACE)
+
+restart-app:
+	$(MAKE) scale-down NAMESPACE=$(NAMESPACE)
+	sleep 5
+	$(MAKE) scale-up NAMESPACE=$(NAMESPACE)
 
 test:
 	go test

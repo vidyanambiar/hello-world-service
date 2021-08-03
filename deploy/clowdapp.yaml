@@ -1,0 +1,41 @@
+---
+apiVersion: v1
+kind: Template
+metadata:
+  name: idp-configs-api
+objects:
+- apiVersion: cloud.redhat.com/v1alpha1
+  kind: ClowdApp
+  metadata:
+    name: idp-configs-api
+  spec:
+
+    # The bulk of your App. This is where your running apps will live
+    deployments:
+    - name: app
+      # Give details about your running pod
+      podSpec:
+        image: ${IMAGE}:${IMAGE_TAG}
+
+    # The name of the ClowdEnvironment providing the services
+    envName: ${ENV_NAME}
+
+    # # Request kafka topics for your application here
+    # kafkaTopics:
+    #   - replicas: 3
+    #     partitions: 64
+    #     topicName: topicOne
+
+    # # Creates a database if local mode, or uses RDS in production
+    # database:
+    #   # Must specify both a name and a major postgres version
+    #   name: jumpstart-db
+    #   version: 12
+
+parameters:
+  - name: IMAGE
+    value: quay.io/vnambiar/idp-configs-api
+  - name: IMAGE_TAG
+    value: latest
+  - name: ENV_NAME
+    required: false

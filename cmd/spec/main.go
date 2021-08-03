@@ -8,7 +8,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3gen"
 	"github.com/ghodss/yaml"
-	"github.com/identitatem/hello-world-service/pkg/errors"
+	"github.com/identitatem/idp-configs-api/pkg/errors"
 )
 
 // Used to generate openapi yaml file for components.
