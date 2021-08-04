@@ -16,7 +16,7 @@ USER root
 RUN go get -d -v
 
 # Compile the application
-RUN go build -o /hello-world-service
+RUN go build -o /idp-configs-api
 
 ############################
 # STEP 2 build a small image
@@ -24,9 +24,9 @@ RUN go build -o /hello-world-service
 
 FROM registry.redhat.io/ubi8-minimal:latest
 
-COPY --from=builder /hello-world-service /usr/bin
+COPY --from=builder /idp-configs-api /usr/bin
 
 USER 1001
 
 # Execute the aplication
-CMD [ "/hello-world-service" ]
+CMD [ "idp-configs-api" ]
