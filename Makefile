@@ -1,4 +1,4 @@
-IMG ?= quay.io/${QUAY_USER}/hello-world-service:latest
+IMG ?= quay.io/${QUAY_USER}/idp-configs-api:latest
 
 build: 
 	go build -o idp-configs-api main.go
