@@ -10,7 +10,7 @@ A simple HTTP server that serves "Hello world" on http://localhost:8080/api/hell
 2. Run `make run`
 
 **To run with docker:**
-1. Start the docker daemon
+1. Start the docker daemon and set `IMG="idp-configs-api:latest"`
 2. Export the following environment variables (needed for pulling the base image from redhat.registry.io):
    1. RH_REGISTRY_USER (redhat.registry.io service account user)
    2. RH_REGISTRY_TOKEN (redhat.registry.io service account token)
