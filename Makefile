@@ -19,7 +19,7 @@ docker-push:
 	docker push ${IMG}
 
 docker-run:
-	docker run --publish 8080:8080 idp-configs-api
+	docker run --publish 3000:3000 idp-configs-api
 
 test:
 	go test

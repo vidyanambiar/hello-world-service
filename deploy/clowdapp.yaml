@@ -43,6 +43,8 @@ objects:
           value: ${CLOWDER_ENABLED}
         - name: ENABLE_CLOUDWATCH_LOGGING
           value: ${ENABLE_CLOUDWATCH_LOGGING}
+        - name: OPENAPIFILEPATH
+          value: ${OPEN_API_FILEPATH}
         resources:
           limits:
             cpu: ${{CPU_LIMIT}}
