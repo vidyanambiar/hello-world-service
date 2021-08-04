@@ -1,7 +1,7 @@
 IMG ?= quay.io/${QUAY_USER}/hello-world-service:latest
 
 build: 
-	go build -o hello-world-service main.go
+	go build -o idp-configs-api main.go
 
 run:
 	go run main.go
@@ -19,7 +19,7 @@ docker-push:
 	docker push ${IMG}
 
 docker-run:
-	docker run --publish 8080:8080 hello-world-service
+	docker run --publish 8080:8080 idp-configs-api
 
 test:
 	go test

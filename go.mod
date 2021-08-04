@@ -1,6 +1,6 @@
-module github.com/identitatem/hello-world-service
+module github.com/identitatem/idp-configs-api
 
-go 1.15
+go 1.16
 
 require (
 	github.com/getkin/kin-openapi v0.67.0
