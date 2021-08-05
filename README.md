@@ -33,15 +33,6 @@ make lint
 ```
 
 ---
-#### Pushing the container image to quay.io:
-
-1. Export the following environment variables
-   1. QUAY_USER (quay.io user name)
-   2. QUAY_TOKEN (quay.io token/ encrypted CLI password)
-   3. IMG="quay.io/${QUAY_USER}/idp-configs-api:latest"
-2. Run `make docker-push`
-
----
 #### Viewing the OpenAPI 3.0 spec:
 
 * Run `make generate-docs`
