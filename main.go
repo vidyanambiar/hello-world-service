@@ -23,6 +23,12 @@ func helloWorld(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "Hello world")
 }
 
+// statusOK returns a simple 200 status code
+func statusOK(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+}
+
 func initDependencies() {
 	config.Init()
 	// l.InitLogger()
@@ -40,6 +46,9 @@ func main() {
 		middleware.Logger,
 		setupDocsMiddleware,
 	)
+
+	// Health check
+	r.Get("/", statusOK)
 
 	// Register handler functions on server routes
 	r.Get("/api/hello-world-service/v0/ping", helloWorld)
