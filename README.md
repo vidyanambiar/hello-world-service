@@ -4,6 +4,7 @@ A simple HTTP server that serves "Hello world" on http://localhost:3000/api/hell
 
 ---
 #### Getting started:
+
 **To run without docker:**
 
 1. Install Golang 1.16
