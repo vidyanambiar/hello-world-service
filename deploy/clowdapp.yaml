@@ -77,3 +77,5 @@ parameters:
   - description: Determines if Cloud Watch logging is enabled
     name: ENABLE_CLOUDWATCH_LOGGING
     value: "false"
+  - name: OPEN_API_FILEPATH
+    value: "./cmd/spec/openapi.json"
