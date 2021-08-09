@@ -1,15 +1,18 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net/http"
+	"os"
+	"os/signal"
 
 	chi "github.com/go-chi/chi/v5"
 	middleware "github.com/go-chi/chi/v5/middleware"
 	redoc "github.com/go-openapi/runtime/middleware"
-
 	"github.com/identitatem/idp-configs-api/config"
 	l "github.com/identitatem/idp-configs-api/logger"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -58,10 +61,12 @@ func main() {
 		setupDocsMiddleware,
 	)
 
+	// Register handler functions on server routes
+
 	// Health check
 	r.Get("/", statusOK)
 
-	// Register handler functions on server routes
+	// Hello World endpoint
 	r.Get("/api/hello-world-service/v0/ping", helloWorld)
 
 	// OpenAPI Spec
@@ -69,8 +74,45 @@ func main() {
 		http.ServeFile(w, r, cfg.OpenAPIFilePath)
 	})
 
-	fmt.Println("Listening on port", cfg.WebPort)
+	// Router for metrics
+	mr := chi.NewRouter()
+	mr.Get("/", statusOK)
+	mr.Handle("/metrics", promhttp.Handler())
 
-	// Listen and serve using the router
-	http.ListenAndServe(fmt.Sprintf(":%d", cfg.WebPort), r)
+	srv := http.Server{
+		Addr:    fmt.Sprintf(":%d", cfg.WebPort),
+		Handler: r,
+	}
+
+	msrv := http.Server{
+		Addr:    fmt.Sprintf(":%d", cfg.MetricsPort),
+		Handler: mr,
+	}	
+
+	idleConnsClosed := make(chan struct{})
+	go func() {
+		sigint := make(chan os.Signal, 1)
+		signal.Notify(sigint, os.Interrupt)
+		<-sigint
+		if err := srv.Shutdown(context.Background()); err != nil {
+			log.WithFields(log.Fields{"error": err}).Fatal("HTTP Server Shutdown failed")
+		}
+		if err := msrv.Shutdown(context.Background()); err != nil {
+			log.WithFields(log.Fields{"error": err}).Fatal("HTTP Server Shutdown failed")
+		}
+		close(idleConnsClosed)
+	}()
+	
+	go func() {
+		if err := msrv.ListenAndServe(); err != http.ErrServerClosed {
+			log.WithFields(log.Fields{"error": err}).Fatal("Metrics Service Stopped")
+		}
+	}()
+
+	if err := srv.ListenAndServe(); err != http.ErrServerClosed {
+		log.WithFields(log.Fields{"error": err}).Fatal("Service Stopped")
+	}
+
+	<-idleConnsClosed
+	log.Info("Everything has shut down, goodbye")
 }
