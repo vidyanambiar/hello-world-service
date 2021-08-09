@@ -9,6 +9,8 @@ import (
 	redoc "github.com/go-openapi/runtime/middleware"
 
 	"github.com/identitatem/idp-configs-api/config"
+	l "github.com/identitatem/idp-configs-api/logger"
+	log "github.com/sirupsen/logrus"
 )
 
 func setupDocsMiddleware(handler http.Handler) http.Handler {
@@ -31,13 +33,22 @@ func statusOK(w http.ResponseWriter, r *http.Request) {
 
 func initDependencies() {
 	config.Init()
-	// l.InitLogger()
+	l.InitLogger()
 	// db.InitDB()
 }
 
 func main() {
 	initDependencies()
 	cfg := config.Get()
+	log.WithFields(log.Fields{
+		"Hostname":         cfg.Hostname,
+		"Auth":             cfg.Auth,
+		"WebPort":          cfg.WebPort,
+		"MetricsPort":      cfg.MetricsPort,
+		"LogLevel":         cfg.LogLevel,
+		"Debug":            cfg.Debug,
+		"OpenAPIFilePath ": cfg.OpenAPIFilePath,
+	}).Info("Configuration Values:")
 
 	// Initialize router
 	r := chi.NewRouter()
