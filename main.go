@@ -34,6 +34,12 @@ func statusOK(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
+// Serve OpenAPI spec json
+func serveOpenAPISpec(w http.ResponseWriter, r *http.Request) {	
+	cfg := config.Get()
+	http.ServeFile(w, r, cfg.OpenAPIFilePath)
+}
+
 func initDependencies() {
 	config.Init()
 	l.InitLogger()
@@ -70,9 +76,7 @@ func main() {
 	r.Get("/api/hello-world-service/v0/ping", helloWorld)
 
 	// OpenAPI Spec
-	r.Get("/api/hello-world-service/v0/openapi.json", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, cfg.OpenAPIFilePath)
-	})
+	r.Get("/api/hello-world-service/v0/openapi.json", serveOpenAPISpec)
 
 	// Router for metrics
 	mr := chi.NewRouter()
