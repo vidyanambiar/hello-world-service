@@ -57,7 +57,7 @@ deploy-env:
 	bonfire deploy-env -n $(NAMESPACE)
 
 deploy-app:
-	bonfire deploy idp-configs -n $(NAMESPACE) --set-image-tag ${IMAGE}=${IMAGE_TAG}
+	bonfire deploy idp-configs -n $(NAMESPACE)
 
 scale-down:
 	$(KUBECTL) scale --replicas=0 deployment/idp-configs-api-service -n $(NAMESPACE)

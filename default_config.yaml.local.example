@@ -16,3 +16,6 @@ apps:
       repo: REPO
       path: deploy/clowdapp.yaml
       ref: main
+      parameters:
+        IMAGE: quay.io/cloudservices/idp-configs-api
+        IMAGE_TAG: "latest"        
