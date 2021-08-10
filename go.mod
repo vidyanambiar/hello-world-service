@@ -8,7 +8,7 @@ require (
 	github.com/ghodss/yaml v1.0.0
 	github.com/go-chi/chi/v5 v5.0.3
 	github.com/go-openapi/runtime v0.19.29
-	github.com/onsi/gomega v1.15.0 // indirect
+	github.com/onsi/gomega v1.15.0
 	github.com/prometheus/client_golang v1.11.0
 	github.com/redhatinsights/app-common-go v1.5.1
 	github.com/redhatinsights/platform-go-middlewares v0.9.0
