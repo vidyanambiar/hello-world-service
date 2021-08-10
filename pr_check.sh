@@ -37,5 +37,5 @@ oc get service -n $NAMESPACE
 # echo "** port forward"
 # oc port-forward svc/idp-configs-api-service 8000:8000 -n $NAMESPACE
 echo "** curl"
-curl -v http://localhost:8000/
+curl -v http://idp-configs-api-service:8000/
 echo "** end pr_check.sh"
