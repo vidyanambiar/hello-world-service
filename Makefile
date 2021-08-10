@@ -6,7 +6,9 @@ ifeq ($(UNAME_S),Darwin)
 	OS_SED += ""
 endif
 
-IMG="quay.io/cloudservices/idp-configs-api"
+IMAGE="quay.io/cloudservices/idp-configs-api"
+IMAGE_TAG="latest"
+
 KUBECTL=kubectl
 NAMESPACE=default
 
@@ -20,7 +22,7 @@ run:
 docker-build:
 # Base image for go is pulled from registry.redhat.io
 	docker login -u="${RH_REGISTRY_USER}" -p="${RH_REGISTRY_TOKEN}" registry.redhat.io
-	docker build --tag ${IMG} .
+	docker build --tag ${IMAGE}:${IMAGE_TAG} .
 
 docker-run:
 	docker run --publish 3000:3000 idp-configs-api
