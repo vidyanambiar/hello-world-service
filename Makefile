@@ -26,7 +26,7 @@ docker-run:
 	docker run --publish 3000:3000 idp-configs-api
 
 test:
-	go test
+	go test -v -coverprofile=coverage.out
 
 vet:
 	go vet ./...
