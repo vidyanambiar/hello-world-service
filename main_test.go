@@ -12,7 +12,7 @@ import (
 
 func TestHelloWorld(t *testing.T) {
 	g := gomega.NewGomegaWithT(t)
-	req, err := http.NewRequest("GET", "/api/hello-world-service/v0/ping", nil);
+	req, err := http.NewRequest("GET", "/api/idp-configs-api/v0/ping", nil);
 
 	g.Expect(err).ShouldNot(gomega.HaveOccurred())
 
@@ -49,7 +49,7 @@ func TestOpenApiSpec(t *testing.T) {
 	// Initialize config for test
 	config.Init()
 
-	req, err := http.NewRequest("GET", "/api/hello-world-service/v0/openapi.json", nil);
+	req, err := http.NewRequest("GET", "/api/idp-configs-api/v0/openapi.json", nil);
 
 	g.Expect(err).ShouldNot(gomega.HaveOccurred())
 

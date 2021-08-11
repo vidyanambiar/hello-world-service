@@ -18,7 +18,7 @@ import (
 
 func setupDocsMiddleware(handler http.Handler) http.Handler {
 	opt := redoc.RedocOpts{
-		SpecURL: "/api/hello-world-service/v0/openapi.json",
+		SpecURL: "/api/idp-configs-api/v0/openapi.json",
 	}
 	return redoc.Redoc(opt, handler)
 }
@@ -73,10 +73,10 @@ func main() {
 	r.Get("/", statusOK)
 
 	// Hello World endpoint
-	r.Get("/api/hello-world-service/v0/ping", helloWorld)
+	r.Get("/api/idp-configs-api/v0/ping", helloWorld)
 
 	// OpenAPI Spec
-	r.Get("/api/hello-world-service/v0/openapi.json", serveOpenAPISpec)
+	r.Get("/api/idp-configs-api/v0/openapi.json", serveOpenAPISpec)
 
 	// Router for metrics
 	mr := chi.NewRouter()

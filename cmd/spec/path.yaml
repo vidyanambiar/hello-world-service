@@ -3,7 +3,7 @@ info:
   version: 1.0.0
 openapi: 3.0.0
 paths:
-  /api/hello-world-service/v0/ping:
+  /api/idp-configs-api/v0/ping:
     get:
       operationId: helloWorld
       description: Returns Hello World
