@@ -1,6 +1,6 @@
 # idp-configs-api
 
-A simple Go HTTP server that serves "Hello world" on http://localhost:3000/api/hello-world-service/v0/ping
+A simple Go HTTP server that serves "Hello world" on http://localhost:3000/api/idp-configs-api/v0/ping
 
 ---
 #### Getting started:
