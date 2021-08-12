@@ -25,6 +25,7 @@ RUN go build -o /idp-configs-api
 FROM registry.redhat.io/ubi8-minimal:latest
 
 COPY --from=builder /idp-configs-api /usr/bin
+COPY --from=builder /app/cmd/spec/openapi.json /var/tmp
 
 USER 1001
 
