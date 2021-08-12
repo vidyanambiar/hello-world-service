@@ -78,4 +78,4 @@ parameters:
     name: ENABLE_CLOUDWATCH_LOGGING
     value: "false"
   - name: OPEN_API_FILEPATH
-    value: "./cmd/spec/openapi.json"
+    value: /var/tmp/openapi.json

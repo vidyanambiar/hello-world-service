@@ -25,7 +25,7 @@ docker-build:
 	docker build --tag ${IMAGE}:${IMAGE_TAG} .
 
 docker-run:
-	docker run --publish 3000:3000 idp-configs-api
+	docker run --publish 3000:3000 ${IMAGE}:${IMAGE_TAG}
 
 test:
 	go test -v -coverprofile=coverage.out
