@@ -1,3 +1,5 @@
+// Copyright Red Hat
+
 package errors
 
 import (

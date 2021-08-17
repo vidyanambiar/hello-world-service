@@ -1,3 +1,4 @@
+// Copyright Red Hat
 package main
 
 import (
@@ -35,7 +36,7 @@ func statusOK(w http.ResponseWriter, r *http.Request) {
 }
 
 // Serve OpenAPI spec json
-func serveOpenAPISpec(w http.ResponseWriter, r *http.Request) {	
+func serveOpenAPISpec(w http.ResponseWriter, r *http.Request) {
 	cfg := config.Get()
 	http.ServeFile(w, r, cfg.OpenAPIFilePath)
 }
@@ -91,7 +92,7 @@ func main() {
 	msrv := http.Server{
 		Addr:    fmt.Sprintf(":%d", cfg.MetricsPort),
 		Handler: mr,
-	}	
+	}
 
 	idleConnsClosed := make(chan struct{})
 	go func() {
@@ -106,7 +107,7 @@ func main() {
 		}
 		close(idleConnsClosed)
 	}()
-	
+
 	go func() {
 		if err := msrv.ListenAndServe(); err != http.ErrServerClosed {
 			log.WithFields(log.Fields{"error": err}).Fatal("Metrics Service Stopped")

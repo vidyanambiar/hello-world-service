@@ -1,5 +1,6 @@
 #!/bin/bash
 # Copyright Contributors to the Open Cluster Management project
+# Copyright Red Hat
 
 # TESTED ON MAC!
 
@@ -11,7 +12,6 @@ TMP_FILE="tmp_file"
 
 ALL_FILES=$(git ls-files | \
  grep -v -f <(sed '/^[[:space:]]*$/d ; s/\([.|]\)/\\\1/g; s/\?/./g ; s/\*/.*/g' .copyrightignore))
-echo "ALL_FILES is $ALL_FILES"
 
 COMMUNITY_COPY_HEADER_FILE="$PWD/build/copyright-header.txt"
 
@@ -31,7 +31,6 @@ ERROR=false
 
 for FILE in $ALL_FILES
 do
-    echo "Checking file $FILE"
     if [[ -d $FILE ]] ; then
         continue
     fi

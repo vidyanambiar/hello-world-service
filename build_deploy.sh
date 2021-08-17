@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright Red Hat
 
 set -exv
 

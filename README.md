@@ -1,3 +1,4 @@
+[comment]: # ( Copyright Red Hat )
 # idp-configs-api
 
 A simple Go HTTP server that serves "Hello world" on http://localhost:3000/api/idp-configs-api/v0/ping

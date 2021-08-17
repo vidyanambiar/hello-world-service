@@ -1,3 +1,5 @@
+# Copyright Red Hat
+
 ############################
 # STEP 1 build executable binary
 ############################

@@ -1,3 +1,4 @@
+# Copyright Red Hat
 
 S := $(shell uname)
 UNAME_S := $(shell uname -s)
