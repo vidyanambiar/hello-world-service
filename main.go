@@ -13,6 +13,7 @@ import (
 	redoc "github.com/go-openapi/runtime/middleware"
 	"github.com/identitatem/idp-configs-api/config"
 	l "github.com/identitatem/idp-configs-api/logger"
+	"github.com/identitatem/idp-configs-api/pkg/routes"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	log "github.com/sirupsen/logrus"
 )
@@ -70,14 +71,16 @@ func main() {
 
 	// Register handler functions on server routes
 
-	// Health check
-	r.Get("/", statusOK)
+	// Unauthenticated routes
+	r.Get("/", statusOK)	// Health check
+	r.Get("/api/idp-configs-api/v0/openapi.json", serveOpenAPISpec)	// OpenAPI Spec
 
-	// Hello World endpoint
-	r.Get("/api/idp-configs-api/v0/ping", helloWorld)
+	// Authenticated routes
+	r.Get("/api/idp-configs-api/v0/ping", helloWorld)	// Hello World endpoint
 
-	// OpenAPI Spec
-	r.Get("/api/idp-configs-api/v0/openapi.json", serveOpenAPISpec)
+	r.Route("/api/idp-configs-api/v0", func(s chi.Router) {
+		s.Route("/auth_realms", routes.MakeRouterForAuthRealms)
+	})
 
 	// Router for metrics
 	mr := chi.NewRouter()
