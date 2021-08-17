@@ -12,6 +12,11 @@ IMAGE_TAG="latest"
 KUBECTL=kubectl
 NAMESPACE=default
 
+check: check-copyright
+
+check-copyright:
+	@build/check-copyright.sh
+
 build: 
 	go build -o idp-configs-api main.go
 
