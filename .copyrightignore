@@ -1,0 +1,7 @@
+#file extensions to ignore on top of .gitignore
+.copyrightignore
+.gitignore
+.yml
+.yaml
+# directories to ignore
+.github/

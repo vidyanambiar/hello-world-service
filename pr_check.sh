@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright Red Hat
 
 echo "os: $OSTYPE"
 echo "shell: $SHELL"
