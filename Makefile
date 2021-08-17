@@ -77,3 +77,5 @@ restart-app:
 	$(MAKE) scale-down NAMESPACE=$(NAMESPACE)
 	sleep 5
 	$(MAKE) scale-up NAMESPACE=$(NAMESPACE)	
+
+.PHONY: build

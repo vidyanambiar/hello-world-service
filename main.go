@@ -13,6 +13,7 @@ import (
 	redoc "github.com/go-openapi/runtime/middleware"
 	"github.com/identitatem/idp-configs-api/config"
 	l "github.com/identitatem/idp-configs-api/logger"
+	"github.com/identitatem/idp-configs-api/pkg/db"
 	"github.com/identitatem/idp-configs-api/pkg/routes"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	log "github.com/sirupsen/logrus"
@@ -45,7 +46,7 @@ func serveOpenAPISpec(w http.ResponseWriter, r *http.Request) {
 func initDependencies() {
 	config.Init()
 	l.InitLogger()
-	// db.InitDB()
+	db.InitDB()
 }
 
 func main() {

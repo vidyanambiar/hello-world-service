@@ -2,9 +2,14 @@
 
 package models
 
-import "time"
+import (
+	"time"
+
+	"gorm.io/gorm"
+)
 
 type AuthRealm struct  {
+	gorm.Model
 	Id			int		`json:"id"`
 	Name		string	`json:"name"`
 	Account 	string  `json:"account"` 
