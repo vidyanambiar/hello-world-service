@@ -21,16 +21,16 @@ func GetAuthRealmsForAccount(w http.ResponseWriter, r *http.Request) {
 	// Get account from request header
 	account, err := common.GetAccount(r)
 
-	if (err != nil) {
-        http.Error(w, err.Error(), http.StatusBadRequest)
+	if (err != nil) {        
+		errors.RespondWithBadRequest(err.Error(), w)
         return		
 	}
 	
 	// Fetch Auth Realms for specific account from the DB
 	result := db.DB.Where("Account = ?", account).Find(&authRealms)
 
-	if result.Error != nil {
-		http.Error(w, result.Error.Error(), http.StatusBadRequest)
+	if result.Error != nil {		
+		errors.RespondWithBadRequest(result.Error.Error(), w)
 		return
 	}
 
@@ -56,9 +56,7 @@ func CreateAuthRealmForAccount(w http.ResponseWriter, r *http.Request) {
 	// Request body must contain the auth-realm Name and Custom Resource
 	if (authRealm.Name == "" || authRealm.CustomResource == nil) {
 		// Bad request
-		err := errors.NewBadRequest("The request body must contain 'Name' and 'CustomResource'")
-		w.WriteHeader(err.Status)
-		json.NewEncoder(w).Encode(&err)
+		errors.RespondWithBadRequest("The request body must contain 'Name' and 'CustomResource'", w)
 		return	
 	}
 
@@ -69,22 +67,18 @@ func CreateAuthRealmForAccount(w http.ResponseWriter, r *http.Request) {
 
 	if (err != nil) {
 		// Bad request
-		err := errors.NewBadRequest(err.Error())
-		w.WriteHeader(err.Status)
-		json.NewEncoder(w).Encode(&err)
+		errors.RespondWithBadRequest(err.Error(), w)
 		return			
 	}
 
 	// Temporarily responding with the auth realm object that will be submitted to the DB
 	authRealmJSON, _ := json.Marshal(authRealm)
 
-	// Create record for auth_realm in the DB		
+	// Create record for auth realm in the DB		
 	tx := db.DB.Create(&authRealm)
 	if tx.Error != nil {
-		// Error updating the DB
-		err := errors.NewInternalServerError("Error creating record in the DB: " + tx.Error.Error())
-		w.WriteHeader(err.Status)
-		json.NewEncoder(w).Encode(&err)
+		// Error updating the DB		
+		errors.RespondWithInternalServerError("Error creating record in the DB: " + tx.Error.Error(), w)
 		return			
 	}
 

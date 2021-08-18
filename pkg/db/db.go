@@ -22,13 +22,6 @@ func InitDB() {
 	cfg := config.Get()
 
 	if cfg.Database != nil {
-		fmt.Printf("Postgres host=%s user=%s password=%s dbname=%s port=%d",
-			cfg.Database.Hostname,
-			cfg.Database.User,
-			cfg.Database.Password,
-			cfg.Database.Name,
-			cfg.Database.Port,
-		)
 		dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d",
 			cfg.Database.Hostname,
 			cfg.Database.User,

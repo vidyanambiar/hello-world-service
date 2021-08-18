@@ -3,6 +3,7 @@
 package errors
 
 import (
+	"encoding/json"
 	"net/http"
 )
 
@@ -56,4 +57,16 @@ func NewNotFound(message string) *NotFound {
 	err.Title = message
 	err.Status = http.StatusNotFound
 	return err
+}
+
+func RespondWithBadRequest (message string, w http.ResponseWriter) {
+	err := NewBadRequest(message)
+	w.WriteHeader(err.Status)
+	json.NewEncoder(w).Encode(&err)
+}
+
+func RespondWithInternalServerError (message string, w http.ResponseWriter) {
+	err := NewInternalServerError(message)
+	w.WriteHeader(err.Status)
+	json.NewEncoder(w).Encode(&err)
 }
