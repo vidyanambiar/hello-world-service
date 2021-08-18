@@ -78,13 +78,14 @@ func main() {
 	r.Get("/api/idp-configs-api/v0/openapi.json", serveOpenAPISpec)	// OpenAPI Spec
 
 	// Authenticated routes
+	ar := r.Group(nil)
 	if cfg.Auth {
-		r.Use(identity.EnforceIdentity)	// EnforceIdentity extracts the X-Rh-Identity header and places the contents into the request context. 
+		ar.Use(identity.EnforceIdentity)	// EnforceIdentity extracts the X-Rh-Identity header and places the contents into the request context. 
 	}
 
-	r.Get("/api/idp-configs-api/v0/ping", helloWorld)	// Hello World endpoint
+	ar.Get("/api/idp-configs-api/v0/ping", helloWorld)	// Hello World endpoint
 
-	r.Route("/api/idp-configs-api/v0", func(s chi.Router) {
+	ar.Route("/api/idp-configs-api/v0", func(s chi.Router) {
 		s.Route("/auth_realms", routes.MakeRouterForAuthRealms)
 	})
 

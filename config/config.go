@@ -44,7 +44,7 @@ func Init() {
 	options.SetDefault("WebPort", 3000)
 	options.SetDefault("MetricsPort", 8080)
 	options.SetDefault("LogLevel", "INFO")
-	options.SetDefault("Auth", false)
+	options.SetDefault("Auth", true)
 	options.SetDefault("Debug", false)
 	options.SetDefault("OpenAPIFilePath", "./cmd/spec/openapi.json")
 	options.SetDefault("Database", "sqlite")
