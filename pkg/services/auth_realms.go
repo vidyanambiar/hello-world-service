@@ -71,9 +71,6 @@ func CreateAuthRealmForAccount(w http.ResponseWriter, r *http.Request) {
 		return			
 	}
 
-	// Temporarily responding with the auth realm object that will be submitted to the DB
-	authRealmJSON, _ := json.Marshal(authRealm)
-
 	// Create record for auth realm in the DB		
 	tx := db.DB.Create(&authRealm)
 	if tx.Error != nil {
@@ -82,6 +79,10 @@ func CreateAuthRealmForAccount(w http.ResponseWriter, r *http.Request) {
 		return			
 	}
 
+	// Temporarily responding with the auth realm object that will be submitted to the DB
+	authRealmJSON, _ := json.Marshal(authRealm)	
+
+	// Return ID for created
 	fmt.Fprint(w, string(authRealmJSON))
 }
 
