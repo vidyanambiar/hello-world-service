@@ -22,10 +22,10 @@ type InternalServerError struct {
 }
 
 // NewInternalServerError creates a new InternalServerError
-func NewInternalServerError() *InternalServerError {
+func NewInternalServerError(message string) *InternalServerError {
 	err := new(InternalServerError)
 	err.Code = "ERROR"
-	err.Title = "Something went wrong."
+	err.Title = message
 	err.Status = http.StatusInternalServerError
 	return err
 }

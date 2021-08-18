@@ -16,6 +16,7 @@ import (
 	"github.com/identitatem/idp-configs-api/pkg/db"
 	"github.com/identitatem/idp-configs-api/pkg/routes"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/redhatinsights/platform-go-middlewares/identity"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -77,6 +78,10 @@ func main() {
 	r.Get("/api/idp-configs-api/v0/openapi.json", serveOpenAPISpec)	// OpenAPI Spec
 
 	// Authenticated routes
+	if cfg.Auth {
+		r.Use(identity.EnforceIdentity)	// EnforceIdentity extracts the X-Rh-Identity header and places the contents into the request context. 
+	}
+
 	r.Get("/api/idp-configs-api/v0/ping", helloWorld)	// Hello World endpoint
 
 	r.Route("/api/idp-configs-api/v0", func(s chi.Router) {

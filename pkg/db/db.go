@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/identitatem/idp-configs-api/config"
+	"github.com/identitatem/idp-configs-api/pkg/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -21,6 +22,13 @@ func InitDB() {
 	cfg := config.Get()
 
 	if cfg.Database != nil {
+		fmt.Printf("Postgres host=%s user=%s password=%s dbname=%s port=%d",
+			cfg.Database.Hostname,
+			cfg.Database.User,
+			cfg.Database.Password,
+			cfg.Database.Name,
+			cfg.Database.Port,
+		)
 		dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d",
 			cfg.Database.Hostname,
 			cfg.Database.User,
@@ -29,12 +37,17 @@ func InitDB() {
 			cfg.Database.Port,
 		)
 		dia = postgres.Open(dsn)
+		fmt.Println("Opening postgres DB...")
 	} else {
 		dia = sqlite.Open("test.db")
+		fmt.Println("Opening sqlite DB...")
 	}
 
 	DB, err = gorm.Open(dia, &gorm.Config{})
 	if err != nil {
 		panic(fmt.Sprintf("failed to connect database: %s", err.Error()))
 	}
+
+	// Migrate the schema
+	DB.AutoMigrate(&models.AuthRealm{})
 }

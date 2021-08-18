@@ -3,17 +3,12 @@
 package models
 
 import (
-	"time"
-
+	"gorm.io/datatypes"
 	"gorm.io/gorm"
 )
-
 type AuthRealm struct  {
 	gorm.Model
-	Id			int		`json:"id"`
-	Name		string	`json:"name"`
-	Account 	string  `json:"account"` 
-	CreatedAt	time.Time	`json:"createdAt"`
-	UpdatedAt	time.Time	`json:"updatedAt"`
-	CustomResource	map[string]interface{} `json:"customResource"`
+	Name		string	`json:"Name" gorm:"unique"`	// Enforce uniqueness on the name
+	Account 	string  `json:"Account"` 
+	CustomResource	datatypes.JSON `json:"CustomResource"`
 }
