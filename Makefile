@@ -1,5 +1,7 @@
 # Copyright Red Hat
 
+-include /opt/build-harness/Makefile.prow
+
 S := $(shell uname)
 UNAME_S := $(shell uname -s)
 OS_SED :=
