@@ -42,5 +42,6 @@ func InitDB() {
 	}
 
 	// Migrate the schema
+	fmt.Println("Auto-migrate models...")
 	DB.AutoMigrate(&models.AuthRealm{})
 }

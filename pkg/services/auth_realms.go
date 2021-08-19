@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/identitatem/idp-configs-api/pkg/common"
 	"github.com/identitatem/idp-configs-api/pkg/db"
@@ -71,16 +72,22 @@ func CreateAuthRealmForAccount(w http.ResponseWriter, r *http.Request) {
 		return			
 	}
 
+	// Temporarily responding with the auth realm object that will be submitted to the DB
+	authRealmJSON, _ := json.Marshal(authRealm)
+
 	// Create record for auth realm in the DB		
 	tx := db.DB.Create(&authRealm)
 	if tx.Error != nil {
-		// Error updating the DB		
-		errors.RespondWithInternalServerError("Error creating record in the DB: " + tx.Error.Error(), w)
+		errorMessage := tx.Error.Error()
+		if (strings.Contains(strings.ToLower(errorMessage), "unique constraint")) {	// The error message looks a little different between sqlite and postgres 
+			// Unique constraint violated (return 409)
+			errors.RespondWithConflict("Error creating record in the DB: " + tx.Error.Error(), w)			
+		} else {
+			// Error updating the DB		
+			errors.RespondWithInternalServerError("Error creating record in the DB: " + tx.Error.Error(), w)
+		}
 		return			
 	}
-
-	// Temporarily responding with the auth realm object that will be submitted to the DB
-	authRealmJSON, _ := json.Marshal(authRealm)	
 
 	// Return ID for created
 	fmt.Fprint(w, string(authRealmJSON))

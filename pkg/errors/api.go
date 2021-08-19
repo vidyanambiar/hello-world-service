@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-// APIError defines a type for all errors returned by the Hello World service
+// APIError defines a type for all errors returned by the IDP Config service
 type APIError struct {
 	Code   string `json:"Code"`
 	Status int    `json:"Status"`
@@ -17,7 +17,7 @@ type APIError struct {
 // Error gets a error string from an APIError
 func (e *APIError) Error() string { return e.Title }
 
-// InternalServerError defines a generic error for the Hello World service
+// InternalServerError defines a generic error for the IDP Config service
 type InternalServerError struct {
 	APIError
 }
@@ -28,6 +28,20 @@ func NewInternalServerError(message string) *InternalServerError {
 	err.Code = "ERROR"
 	err.Title = message
 	err.Status = http.StatusInternalServerError
+	return err
+}
+
+// Conflict defines a 409 error for the IDP Config service (Violation of Unique Constraint for name within an account)
+type Conflict struct {
+	APIError
+}
+
+// NewConflict creates a new Conflict
+func NewConflict(message string) *Conflict {
+	err := new(Conflict)
+	err.Code = "ERROR"
+	err.Title = message
+	err.Status = http.StatusConflict
 	return err
 }
 
@@ -67,6 +81,12 @@ func RespondWithBadRequest (message string, w http.ResponseWriter) {
 
 func RespondWithInternalServerError (message string, w http.ResponseWriter) {
 	err := NewInternalServerError(message)
+	w.WriteHeader(err.Status)
+	json.NewEncoder(w).Encode(&err)
+}
+
+func RespondWithConflict (message string, w http.ResponseWriter) {
+	err := NewConflict(message)
 	w.WriteHeader(err.Status)
 	json.NewEncoder(w).Encode(&err)
 }

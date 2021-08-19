@@ -3,7 +3,6 @@
 package db
 
 import (
-	"fmt"
 	"os"
 	"testing"
 
@@ -14,7 +13,6 @@ import (
 )
 
 var	authRealm models.AuthRealm
-var	authRealms []models.AuthRealm
 
 func TestMain(m *testing.M) {
 	retCode := m.Run()
@@ -23,7 +21,6 @@ func TestMain(m *testing.M) {
 }
 
 func TestInitDB(t *testing.T) {
-	fmt.Println("TestInitDB")
 	g := gomega.NewGomegaWithT(t)
 	// Initialize config for test
 	config.Init()
@@ -38,10 +35,6 @@ func TestInitDB(t *testing.T) {
 	authRealm.CustomResource = datatypes.JSON{}
 	result := DB.Create(&authRealm)
 	g.Expect(result.Error).ShouldNot(gomega.HaveOccurred())
-
-	result = DB.Find(&authRealms)
-	g.Expect(result.Error).ShouldNot(gomega.HaveOccurred())
-	g.Expect(authRealms[0].Account).To(gomega.Equal("0000000"))	
 }
 
 func tearDown() {
