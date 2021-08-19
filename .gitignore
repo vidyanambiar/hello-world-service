@@ -17,3 +17,10 @@ idp-configs-api
 
 # bonfire config
 config.yaml
+
+# VS Code
+.vscode/
+__debug_bin
+
+# db
+test.db

@@ -17,17 +17,17 @@ type IdpConfig struct {
 	Logging     *loggingConfig
 	LogLevel    string
 	Debug       bool
-	//	Database                 *dbConfig
+    Database        *dbConfig
 	OpenAPIFilePath string
 }
 
-// type dbConfig struct {
-// 	User     string
-// 	Password string
-// 	Hostname string
-// 	Port     uint
-// 	Name     string
-// }
+type dbConfig struct {
+	User     string
+	Password string
+	Hostname string
+	Port     uint
+	Name     string
+}
 
 type loggingConfig struct {
 	AccessKeyID     string
@@ -44,10 +44,10 @@ func Init() {
 	options.SetDefault("WebPort", 3000)
 	options.SetDefault("MetricsPort", 8080)
 	options.SetDefault("LogLevel", "INFO")
-	options.SetDefault("Auth", false)
+	options.SetDefault("Auth", true)
 	options.SetDefault("Debug", false)
 	options.SetDefault("OpenAPIFilePath", "./cmd/spec/openapi.json")
-	// options.SetDefault("Database", "sqlite")
+	options.SetDefault("Database", "sqlite")
 	options.AutomaticEnv()
 
 	if options.GetBool("Debug") {
@@ -67,17 +67,17 @@ func Init() {
 		OpenAPIFilePath: options.GetString("OpenAPIFilePath"),
 	}
 
-	// database := options.GetString("database")
+	database := options.GetString("database")
 
-	// if database == "pgsql" {
-	// 	config.Database = &dbConfig{
-	// 		User:     options.GetString("PGSQL_USER"),
-	// 		Password: options.GetString("PGSQL_PASSWORD"),
-	// 		Hostname: options.GetString("PGSQL_HOSTNAME"),
-	// 		Port:     options.GetUint("PGSQL_PORT"),
-	// 		Name:     options.GetString("PGSQL_DATABASE"),
-	// 	}
-	// }
+	if database == "pgsql" {
+		config.Database = &dbConfig{
+			User:     options.GetString("PGSQL_USER"),
+			Password: options.GetString("PGSQL_PASSWORD"),
+			Hostname: options.GetString("PGSQL_HOSTNAME"),
+			Port:     options.GetUint("PGSQL_PORT"),
+			Name:     options.GetString("PGSQL_DATABASE"),
+		}
+	}
 
 	if clowder.IsClowderEnabled() {
 		cfg := clowder.LoadedConfig
@@ -85,13 +85,13 @@ func Init() {
 		config.WebPort = *cfg.PublicPort
 		config.MetricsPort = cfg.MetricsPort
 
-		// config.Database = &dbConfig{
-		// 	User:     cfg.Database.Username,
-		// 	Password: cfg.Database.Password,
-		// 	Hostname: cfg.Database.Hostname,
-		// 	Port:     uint(cfg.Database.Port),
-		// 	Name:     cfg.Database.Name,
-		// }
+		config.Database = &dbConfig{
+			User:     cfg.Database.Username,
+			Password: cfg.Database.Password,
+			Hostname: cfg.Database.Hostname,
+			Port:     uint(cfg.Database.Port),
+			Name:     cfg.Database.Name,
+		}
 
 		config.Logging = &loggingConfig{
 			AccessKeyID:     cfg.Logging.Cloudwatch.AccessKeyId,

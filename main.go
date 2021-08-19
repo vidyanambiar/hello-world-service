@@ -13,7 +13,10 @@ import (
 	redoc "github.com/go-openapi/runtime/middleware"
 	"github.com/identitatem/idp-configs-api/config"
 	l "github.com/identitatem/idp-configs-api/logger"
+	"github.com/identitatem/idp-configs-api/pkg/db"
+	"github.com/identitatem/idp-configs-api/pkg/routes"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/redhatinsights/platform-go-middlewares/identity"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -44,7 +47,7 @@ func serveOpenAPISpec(w http.ResponseWriter, r *http.Request) {
 func initDependencies() {
 	config.Init()
 	l.InitLogger()
-	// db.InitDB()
+	db.InitDB()
 }
 
 func main() {
@@ -70,14 +73,21 @@ func main() {
 
 	// Register handler functions on server routes
 
-	// Health check
-	r.Get("/", statusOK)
+	// Unauthenticated routes
+	r.Get("/", statusOK)	// Health check
+	r.Get("/api/idp-configs-api/v0/openapi.json", serveOpenAPISpec)	// OpenAPI Spec
 
-	// Hello World endpoint
-	r.Get("/api/idp-configs-api/v0/ping", helloWorld)
+	// Authenticated routes
+	ar := r.Group(nil)
+	if cfg.Auth {
+		ar.Use(identity.EnforceIdentity)	// EnforceIdentity extracts the X-Rh-Identity header and places the contents into the request context. 
+	}
 
-	// OpenAPI Spec
-	r.Get("/api/idp-configs-api/v0/openapi.json", serveOpenAPISpec)
+	ar.Get("/api/idp-configs-api/v0/ping", helloWorld)	// Hello World endpoint
+
+	ar.Route("/api/idp-configs-api/v0", func(s chi.Router) {
+		s.Route("/auth_realms", routes.MakeRouterForAuthRealms)
+	})
 
 	// Router for metrics
 	mr := chi.NewRouter()

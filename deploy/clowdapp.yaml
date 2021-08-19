@@ -52,6 +52,9 @@ objects:
           requests:
             cpu: 500m
             memory: 512Mi    
+    database:
+      name: idp-configs
+
 
 parameters:
   - description: Cpu limit of service
