@@ -21,6 +21,7 @@ func GetAuthRealmsForAccount(w http.ResponseWriter, r *http.Request) {
 
 	// Get account from request header
 	account, err := common.GetAccount(r)
+	fmt.Println("&&& account", account)
 
 	if (err != nil) {        
 		errors.RespondWithBadRequest(err.Error(), w)
@@ -34,6 +35,8 @@ func GetAuthRealmsForAccount(w http.ResponseWriter, r *http.Request) {
 		errors.RespondWithBadRequest(result.Error.Error(), w)
 		return
 	}
+
+	fmt.Println("&&& authRealms", authRealms)
 
 	// TODO: support filtering and searching by name (query param)
 
