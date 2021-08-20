@@ -20,6 +20,9 @@ RUN go get -d -v
 # Compile the application
 RUN go build -o /idp-configs-api
 
+# Build the migration binary.
+RUN go build -o /idp-configs-api-migrate cmd/migrate/migrate.go
+
 ############################
 # STEP 2 build a small image
 ############################
@@ -27,6 +30,7 @@ RUN go build -o /idp-configs-api
 FROM registry.redhat.io/ubi8-minimal:latest
 
 COPY --from=builder /idp-configs-api /usr/bin
+COPY --from=builder /idp-configs-api-migrate /usr/bin
 COPY --from=builder /app/cmd/spec/openapi.json /var/tmp
 
 USER 1001

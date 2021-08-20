@@ -26,6 +26,9 @@ build:
 run:
 	go run main.go
 
+run-migrate:
+	go run cmd/migrate/migrate.go
+
 # Docker build, push and run
 docker-build:
 # Base image for go is pulled from registry.redhat.io
