@@ -1,12 +1,12 @@
 // Copyright Red Hat
 
-package db
+package main
 
 import (
-	"os"
 	"testing"
 
 	"github.com/identitatem/idp-configs-api/config"
+	"github.com/identitatem/idp-configs-api/pkg/db"
 	"github.com/identitatem/idp-configs-api/pkg/models"
 	"github.com/onsi/gomega"
 	"gorm.io/datatypes"
@@ -14,32 +14,27 @@ import (
 
 var	authRealm models.AuthRealm
 
-func TestMain(m *testing.M) {
-	retCode := m.Run()
-	tearDown()
-	os.Exit(retCode)
-}
-
-func TestInitDB(t *testing.T) {
+func TestMigrateSchema(t *testing.T) {
 	g := gomega.NewGomegaWithT(t)
-	// Initialize config for test
-	config.Init()
-	
-	InitDB()
 
-	// Auto-migrate models
-	DB.AutoMigrate(&models.AuthRealm{})
+	migrateSchema()
 
-	// DB should initialize correctly (verify by adding and querying a record)
+	// Config initialized
+	cfg := config.Get()
+	g.Expect(cfg.WebPort).To(gomega.Equal(3000))
+
+	// DB initialized
 	authRealm = models.AuthRealm{
 		Account: "0000000",
 		Name:  "TestRecord1",
 	}
 	authRealm.CustomResource = datatypes.JSON{}
-	result := DB.Create(&authRealm)
+	result := db.DB.Create(&authRealm)
 	g.Expect(result.Error).ShouldNot(gomega.HaveOccurred())
-}
 
+	tearDown()
+}
+	
 func tearDown() {
-	DB.Where("Account = ?", "0000000").Unscoped().Delete(&authRealm)
+	db.DB.Where("Account = ?", "0000000").Unscoped().Delete(&authRealm)
 }

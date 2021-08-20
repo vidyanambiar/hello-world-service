@@ -18,6 +18,13 @@ objects:
       # Details about running pod
       podSpec:
         image: ${IMAGE}:${IMAGE_TAG}
+        initContainers:
+        - name: run-migrations
+          command:
+            - bash
+            - -c
+            - idp-configs-api-migrate
+          inheritEnv: true        
         livenessProbe:        
           failureThreshold: 3
           httpGet:

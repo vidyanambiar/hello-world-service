@@ -6,7 +6,6 @@ import (
 	"fmt"
 
 	"github.com/identitatem/idp-configs-api/config"
-	"github.com/identitatem/idp-configs-api/pkg/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -40,8 +39,4 @@ func InitDB() {
 	if err != nil {
 		panic(fmt.Sprintf("failed to connect database: %s", err.Error()))
 	}
-
-	// Migrate the schema
-	fmt.Println("Auto-migrate models...")
-	DB.AutoMigrate(&models.AuthRealm{})
 }

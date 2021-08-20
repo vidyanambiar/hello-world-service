@@ -1,47 +1,19 @@
 [comment]: # ( Copyright Red Hat )
 # idp-configs-api
 
-A simple Go HTTP server that serves "Hello world" on http://localhost:3000/api/idp-configs-api/v0/ping
+Service to store and retrieve Identity Provider configurations. 
 
 ---
-
-#### Getting started:
-
-**To run without docker:**
+### Basic setup:
 
 1. Install Golang 1.16
-2. Run `make run`
-
-**To run with docker:**
-1. Start the docker daemon.
-2. Export the following environment variables (needed for pulling the base image from redhat.registry.io):
-   1. RH_REGISTRY_USER (redhat.registry.io service account user)
-   2. RH_REGISTRY_TOKEN (redhat.registry.io service account token)
-3. Run `make docker-build`
-4. Run `make docker-run`
+2. Run `make run-migrate`
+3. Run `make run`
+4. Access the API at http://localhost:3000/api/idp-configs-api/v0/ping
 
 ---
 
-#### Testing and Linting:
-
-**Unit tests:**
-```
-make test
-```
-**Lint:**
-```
-go get -u honnef.co/go/tools/cmd/staticcheck@latest
-make lint
-```
-
----
-#### Viewing the OpenAPI 3.0 spec:
-
-* Run `make generate-docs`
-
-The API will serve the docs under a `/docs` endpoint.
-
-## Local setup with Kubernetes (Minikube)
+### Setup with Kubernetes (Minikube)
 
 This setup utilizes the following tools. Follow the steps in the links for installation:
 - [minikube](https://minikube.sigs.k8s.io/docs/)
@@ -84,7 +56,7 @@ Bonfire can also deploy from GitHub. Running the following command will setup th
 ```
 make bonfire-config-github
 ```
-1. Setup test namespace for deployment.
+8. Setup test namespace for deployment.
 ```
 make create-ns NAMESPACE=test
 ```
@@ -108,4 +80,24 @@ kubectl -n test port-forward service/idp-configs-api-service 8000:8000
 curl -v http://localhost:8000/
 ```
 
-You should get a 200 response back.
+You should get a 200 response.
+
+---
+### Testing and Linting:
+
+Unit tests:
+```
+make test
+```
+Lint:
+```
+go get -u honnef.co/go/tools/cmd/staticcheck@latest
+make lint
+```
+
+---
+#### Viewing the OpenAPI 3.0 spec:
+
+* Run `make generate-docs`
+
+The API will serve the docs under a `/docs` endpoint.
