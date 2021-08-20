@@ -83,13 +83,13 @@ curl -v http://localhost:8000/
 You should get a 200 response.
 
 ---
-#### Testing and Linting:
+### Testing and Linting:
 
-**Unit tests:**
+Unit tests:
 ```
 make test
 ```
-**Lint:**
+Lint:
 ```
 go get -u honnef.co/go/tools/cmd/staticcheck@latest
 make lint
