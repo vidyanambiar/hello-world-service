@@ -21,7 +21,6 @@ func GetAuthRealmsForAccount(w http.ResponseWriter, r *http.Request) {
 
 	// Get account from request header
 	account, err := common.GetAccount(r)
-	fmt.Println("&&& account", account)
 
 	if (err != nil) {        
 		errors.RespondWithBadRequest(err.Error(), w)
@@ -35,9 +34,7 @@ func GetAuthRealmsForAccount(w http.ResponseWriter, r *http.Request) {
 		errors.RespondWithBadRequest(result.Error.Error(), w)
 		return
 	}
-
-	fmt.Println("&&& authRealms", authRealms)
-
+	
 	// TODO: support filtering and searching by name (query param)
 
 	// Respond with auth realms for the account
@@ -86,11 +83,12 @@ func CreateAuthRealmForAccount(w http.ResponseWriter, r *http.Request) {
 		} else {
 			// Error updating the DB		
 			errors.RespondWithInternalServerError("Error creating record in the DB: " + tx.Error.Error(), w)
-		}
+		}	
 		return			
 	}
 
-	// Return ID for created
+	// Return ID for created record (Temporily responding with the complete record)
+	w.WriteHeader(http.StatusOK)
 	fmt.Fprint(w, string(authRealmJSON))
 }
 
