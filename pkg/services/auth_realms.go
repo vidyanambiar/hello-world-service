@@ -34,7 +34,7 @@ func GetAuthRealmsForAccount(w http.ResponseWriter, r *http.Request) {
 		errors.RespondWithBadRequest(result.Error.Error(), w)
 		return
 	}
-	
+
 	// TODO: support filtering and searching by name (query param)
 
 	// Respond with auth realms for the account
@@ -83,7 +83,7 @@ func CreateAuthRealmForAccount(w http.ResponseWriter, r *http.Request) {
 		} else {
 			// Error updating the DB		
 			errors.RespondWithInternalServerError("Error creating record in the DB: " + tx.Error.Error(), w)
-		}	
+		}
 		return			
 	}
 
