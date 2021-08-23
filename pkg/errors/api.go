@@ -85,8 +85,8 @@ func RespondWithInternalServerError (message string, w http.ResponseWriter) {
 	json.NewEncoder(w).Encode(&err)
 }
 
-func RespondWithConflict (message string, w http.ResponseWriter) {
-	err := NewConflict(message)
+func RespondWithConflict (message string, w http.ResponseWriter) {	
+	err := NewConflict(message)	
 	w.WriteHeader(err.Status)
 	json.NewEncoder(w).Encode(&err)
 }
