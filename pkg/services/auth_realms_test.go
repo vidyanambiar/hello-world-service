@@ -132,6 +132,9 @@ func setUp() {
 	config.Init()
 	db.InitDB()
 
+	// Auto-migrate models
+	db.DB.AutoMigrate(&models.AuthRealm{})	
+
 	// Add a record to the DB
 	authRealm = models.AuthRealm{
 		Account: "0000000",
