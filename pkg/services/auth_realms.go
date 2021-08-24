@@ -44,8 +44,6 @@ func GetAuthRealmsForAccount(w http.ResponseWriter, r *http.Request) {
 func CreateAuthRealmForAccount(w http.ResponseWriter, r *http.Request) {
     var authRealm models.AuthRealm
 
-	fmt.Println(r.Context())
-
 	w.Header().Set("Content-Type", "application/json")
 
     err := json.NewDecoder(r.Body).Decode(&authRealm)
@@ -89,7 +87,8 @@ func CreateAuthRealmForAccount(w http.ResponseWriter, r *http.Request) {
 		return			
 	}
 
-	// Return ID for created
+	// Return ID for created record (Temporily responding with the complete record)
+	w.WriteHeader(http.StatusOK)
 	fmt.Fprint(w, string(authRealmJSON))
 }
 
