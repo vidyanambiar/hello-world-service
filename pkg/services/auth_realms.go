@@ -45,7 +45,7 @@ func GetAuthRealmsForAccount(w http.ResponseWriter, r *http.Request) {
 }
 
 func CreateAuthRealmForAccount(w http.ResponseWriter, r *http.Request) {
-    var authRealm models.AuthRealm
+    var authRealm *models.AuthRealm
 
 	w.Header().Set("Content-Type", "application/json")
 
@@ -57,14 +57,9 @@ func CreateAuthRealmForAccount(w http.ResponseWriter, r *http.Request) {
 	}	
 
 	// Parse the request payload
-    err = json.NewDecoder(r.Body).Decode(&authRealm)
-	switch {
-	case err == io.EOF:
-		// empty request body
-		errors.RespondWithBadRequest("The request body must not be empty", w)
-		return
-	case err != nil:
-		// other error
+	authRealm, err = authRealmFromRequestBody(r.Body)
+
+	if err != nil {
 		errors.RespondWithBadRequest(err.Error(), w)
 		return
 	}	
@@ -79,7 +74,7 @@ func CreateAuthRealmForAccount(w http.ResponseWriter, r *http.Request) {
 
 	// If the request body contains an Account number, it should match the requestor's Account number retrieved from the reqeust context
 	if (authRealm.Account != "") {
-		err = validateAccount(&authRealm, account)
+		err = validateAccount(authRealm, account)
 		if (err != nil) {
 			errors.RespondWithBadRequest("Account in the request body does not match account for the authenticated user", w)
 			return			
@@ -237,5 +232,15 @@ func authRealmFromRequestBody(rc io.ReadCloser) (*models.AuthRealm, error) {
 	defer rc.Close()
 	var authRealm models.AuthRealm
 	err := json.NewDecoder(rc).Decode(&authRealm)
+
+	switch {
+	case err == io.EOF:
+		// empty request body
+		return nil, fmt.Errorf("request body must not be empty")		
+	case err != nil:
+		// other error		
+		return nil, err
+	}	
+
 	return &authRealm, err
 }
