@@ -89,7 +89,7 @@ func TestCreateAuthRealmForAccount (t *testing.T) {
 	CreateAuthRealmForAccount(responseRecorder, req.WithContext(ctx))
 	g.Expect(responseRecorder.Code).To(gomega.Equal(http.StatusBadRequest))	
 	json.NewDecoder(responseRecorder.Body).Decode(&badRequest)
-	g.Expect(badRequest.Title).To(gomega.Equal("The request body must contain 'Name' and 'CustomResource'"))	
+	g.Expect(badRequest.Title).To(gomega.Equal("The request body must contain 'name' and 'custom_resource'"))	
 
 	// Expect 409 if Name is not unique within Account
 	authRealm.Name = "TestRecord1" 	// Same as existing record with AccountNumber 0000000
@@ -113,7 +113,7 @@ func TestCreateAuthRealmForAccount (t *testing.T) {
 	CreateAuthRealmForAccount(responseRecorder, req.WithContext(ctx))
 	g.Expect(responseRecorder.Code).To(gomega.Equal(http.StatusBadRequest))	
 
-	// Successful response - Name (unique) and CustomResource present in req body, account number taken from request context
+	// Successful response - name (unique) and custom_resource present in req body, account number taken from request context
 	authRealm.Account = ""
 	authRealm.Name = "TestRecord3"
 	authRealmJSON, _ = json.Marshal(authRealm)

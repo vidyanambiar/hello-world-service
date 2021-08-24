@@ -6,6 +6,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"strings"
 
@@ -55,15 +56,22 @@ func CreateAuthRealmForAccount(w http.ResponseWriter, r *http.Request) {
         return		
 	}	
 
+	// Parse the request payload
     err = json.NewDecoder(r.Body).Decode(&authRealm)
-    if err != nil {
-        http.Error(w, err.Error(), http.StatusBadRequest)
-        return
-    }
+	switch {
+	case err == io.EOF:
+		// empty request body
+		errors.RespondWithBadRequest("The request body must not be empty", w)
+		return
+	case err != nil:
+		// other error
+		errors.RespondWithBadRequest(err.Error(), w)
+		return
+	}	
 
-	// Request body must contain the auth-realm Name and Custom Resource
+	// Request body must contain the auth-realm name and custom_resource
 	if (authRealm.Name == "" || authRealm.CustomResource == nil) {		
-		errors.RespondWithBadRequest("The request body must contain 'Name' and 'CustomResource'", w)
+		errors.RespondWithBadRequest("The request body must contain 'name' and 'custom_resource'", w)
 		return	
 	}
 
@@ -140,23 +148,70 @@ func AuthRealmCtx(next http.Handler) http.Handler {
 }
 
 func GetAuthRealmByID(w http.ResponseWriter, r *http.Request) {
-	ctx := r.Context()
-	authRealm, ok := ctx.Value(authRealmKey).(*models.AuthRealm)
-	if !ok {
-		http.Error(w, "must pass id", http.StatusBadRequest)
-		return
-	}
-
-	// Respond with auth realms for the account
-	json.NewEncoder(w).Encode(&authRealm)	
+	// Respond with auth realm
+	if authRealm := getAuthRealm(w, r); authRealm != nil {
+		json.NewEncoder(w).Encode(authRealm)
+	}	
 }
 
 func UpdateAuthRealmByID(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "UpdateAuthRealmByID")
+	authRealm := getAuthRealm(w, r)	// Auth realm looked up from DB based on auth realm ID from the request
+	if authRealm == nil {
+		return
+	}	
+
+	incoming, err := authRealmFromRequestBody(r.Body)	// Auth realm from the request body
+	if err != nil {
+		errors.RespondWithBadRequest(err.Error(), w)
+		return
+	}
+	
+	// TODO: Validations on payload
+
+	if (incoming.Account != "" && incoming.Account != authRealm.Account) {
+		errors.RespondWithBadRequest("Account number in request body does not match the auth realm account", w)
+		return
+	}
+
+	// If both name and custom_resource are missing in the request body, there is nothing to update
+	if (incoming.Name == "" && incoming.CustomResource == nil) {		
+		errors.RespondWithBadRequest("The request body must contain 'name' or 'custom_resource' for update", w)
+		return	
+	}
+	
+	incoming.ID = authRealm.ID
+	incoming.Account = authRealm.Account
+	incoming.CreatedAt = authRealm.CreatedAt
+
+	if (incoming.Name == "") {
+		incoming.Name = authRealm.Name
+	}
+	if (incoming.CustomResource == nil) {
+		incoming.CustomResource = authRealm.CustomResource
+	}
+
+	// Save updates to the DB
+	if err := db.DB.Save(&incoming).Error; err != nil {
+		errors.RespondWithInternalServerError(err.Error(), w)
+		return
+	}
+
+	json.NewEncoder(w).Encode(incoming)
 }
 
 func DeleteAuthRealmByID(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("DeleteAuthRealmByID")
+	authRealm := getAuthRealm(w, r)	// Auth realm looked up from DB based on auth realm ID from the request
+	if authRealm == nil {
+		return
+	}
+
+	// Implementing a soft delete for now (The records will continue to exist in the DB with the "DeletedAt" field set. They will not be retrievable by regular queries, but using the )
+	if err := db.DB.Delete(&authRealm).Error; err != nil {
+		errors.RespondWithInternalServerError(err.Error(), w)
+		return
+	}		
+
+	fmt.Fprintf(w, "Auth realm with ID %d was successfully deleted", authRealm.ID)	
 }
 
 func validateAccount (authRealm *models.AuthRealm, account string) (error) {	
@@ -166,4 +221,21 @@ func validateAccount (authRealm *models.AuthRealm, account string) (error) {
 	}
 
 	return nil
+}
+
+func getAuthRealm(w http.ResponseWriter, r *http.Request) *models.AuthRealm {
+	ctx := r.Context()
+	authRealm, ok := ctx.Value(authRealmKey).(*models.AuthRealm)
+	if !ok {
+		errors.RespondWithBadRequest("The request must include an auth realm id", w)
+		return nil
+	}	
+	return authRealm
+}
+
+func authRealmFromRequestBody(rc io.ReadCloser) (*models.AuthRealm, error) {
+	defer rc.Close()
+	var authRealm models.AuthRealm
+	err := json.NewDecoder(rc).Decode(&authRealm)
+	return &authRealm, err
 }

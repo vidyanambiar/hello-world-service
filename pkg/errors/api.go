@@ -45,7 +45,7 @@ func NewConflict(message string) *Conflict {
 	return err
 }
 
-// Forbidded defines a 403 error
+// Forbidden defines a 403 error
 type Forbidden struct {
 	APIError
 }
