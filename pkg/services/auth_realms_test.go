@@ -124,7 +124,7 @@ func TestCreateAuthRealmForAccount (t *testing.T) {
 	CreateAuthRealmForAccount(responseRecorder, req.WithContext(ctx))
 	g.Expect(responseRecorder.Code).To(gomega.Equal(http.StatusOK))
 	json.NewDecoder(responseRecorder.Body).Decode(&authRealm)
-	g.Expect(authRealm.ID).To(gomega.Equal(uint(0)))
+	g.Expect(authRealm.ID).ToNot(gomega.BeNil())
 }
 
 func setUp() {

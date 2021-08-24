@@ -45,6 +45,20 @@ func NewConflict(message string) *Conflict {
 	return err
 }
 
+// Forbidded defines a 403 error
+type Forbidden struct {
+	APIError
+}
+
+// NewForbidden creates a new Conflict
+func NewForbidden(message string) *Forbidden {
+	err := new(Forbidden)
+	err.Code = "ERROR"
+	err.Title = message
+	err.Status = http.StatusForbidden
+	return err
+}
+
 // BadRequest defines a error when the client's input generates an error
 type BadRequest struct {
 	APIError
@@ -87,6 +101,18 @@ func RespondWithInternalServerError (message string, w http.ResponseWriter) {
 
 func RespondWithConflict (message string, w http.ResponseWriter) {
 	err := NewConflict(message)
+	w.WriteHeader(err.Status)
+	json.NewEncoder(w).Encode(&err)
+}
+
+func RespondWithForbidden (message string, w http.ResponseWriter) {
+	err := NewForbidden(message)
+	w.WriteHeader(err.Status)
+	json.NewEncoder(w).Encode(&err)
+}
+
+func RespondWitNotFound (message string, w http.ResponseWriter) {
+	err := NewNotFound(message)
 	w.WriteHeader(err.Status)
 	json.NewEncoder(w).Encode(&err)
 }
