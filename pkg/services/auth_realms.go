@@ -5,6 +5,7 @@ package services
 import (
 	"context"
 	"encoding/json"
+	errs "errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -15,6 +16,7 @@ import (
 	"github.com/identitatem/idp-configs-api/pkg/db"
 	"github.com/identitatem/idp-configs-api/pkg/errors"
 	"github.com/identitatem/idp-configs-api/pkg/models"
+	"gorm.io/gorm"
 )
 
 func GetAuthRealmsForAccount(w http.ResponseWriter, r *http.Request) {
@@ -123,8 +125,11 @@ func AuthRealmCtx(next http.Handler) http.Handler {
 			// Fetch record based on Auth Realm ID
 			result := db.DB.First(&authRealm, authRealmID)
 
-			if (result.Error != nil) {
-				errors.RespondWitNotFound(result.Error.Error(), w)
+			if (errs.Is(result.Error, gorm.ErrRecordNotFound)) {
+				errors.RespondWithNotFound(result.Error.Error(), w)	// Record not found
+				return					
+			} else if (result.Error != nil) {	// other error
+				errors.RespondWithInternalServerError(result.Error.Error(), w)
 				return
 			}
 			

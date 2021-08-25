@@ -111,7 +111,7 @@ func RespondWithForbidden (message string, w http.ResponseWriter) {
 	json.NewEncoder(w).Encode(&err)
 }
 
-func RespondWitNotFound (message string, w http.ResponseWriter) {
+func RespondWithNotFound (message string, w http.ResponseWriter) {
 	err := NewNotFound(message)
 	w.WriteHeader(err.Status)
 	json.NewEncoder(w).Encode(&err)
