@@ -13,6 +13,7 @@ require (
 	github.com/mattn/go-sqlite3 v1.14.8 // indirect
 	github.com/onsi/gomega v1.15.0
 	github.com/prometheus/client_golang v1.11.0
+	github.com/prometheus/client_model v0.2.0
 	github.com/redhatinsights/app-common-go v1.5.1
 	github.com/redhatinsights/platform-go-middlewares v0.9.0
 	github.com/sirupsen/logrus v1.8.1
