@@ -105,7 +105,7 @@ func CreateAuthRealmForAccount(w http.ResponseWriter, r *http.Request) {
 
 type key int
 
-const authRealmKey key = 0
+const AuthRealmKey key = 0
 
 // AuthRealmCtx is a handler for Auth Realm requests
 func AuthRealmCtx(next http.Handler) http.Handler {
@@ -136,7 +136,7 @@ func AuthRealmCtx(next http.Handler) http.Handler {
 					return		
 				}				
 			}
-			ctx := context.WithValue(r.Context(), authRealmKey, &authRealm)
+			ctx := context.WithValue(r.Context(), AuthRealmKey, &authRealm)
 			next.ServeHTTP(w, r.WithContext(ctx))
 		}
 	})	
@@ -220,7 +220,7 @@ func validateAccount (authRealm *models.AuthRealm, account string) (error) {
 
 func getAuthRealm(w http.ResponseWriter, r *http.Request) *models.AuthRealm {
 	ctx := r.Context()
-	authRealm, ok := ctx.Value(authRealmKey).(*models.AuthRealm)
+	authRealm, ok := ctx.Value(AuthRealmKey).(*models.AuthRealm)
 	if !ok {
 		errors.RespondWithBadRequest("The request must include an auth realm id", w)
 		return nil
