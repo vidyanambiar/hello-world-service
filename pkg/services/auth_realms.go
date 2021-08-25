@@ -169,21 +169,14 @@ func UpdateAuthRealmByID(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// If both name and custom_resource are missing in the request body, there is nothing to update
-	if (incoming.Name == "" && incoming.CustomResource == nil) {		
-		errors.RespondWithBadRequest("The request body must contain 'name' or 'custom_resource' for update", w)
+	if (incoming.Name == "" || incoming.CustomResource == nil) {		
+		errors.RespondWithBadRequest("The request body must contain 'name' and 'custom_resource' for update", w)
 		return	
 	}
 	
 	incoming.ID = authRealm.ID
 	incoming.Account = authRealm.Account
 	incoming.CreatedAt = authRealm.CreatedAt
-
-	if (incoming.Name == "") {
-		incoming.Name = authRealm.Name
-	}
-	if (incoming.CustomResource == nil) {
-		incoming.CustomResource = authRealm.CustomResource
-	}
 
 	// Save updates to the DB
 	if err := db.DB.Save(&incoming).Error; err != nil {
