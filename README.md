@@ -18,15 +18,15 @@ Service to store and retrieve Identity Provider configurations.
 2. Using the instructions in the step above, reserve a namespace on the ephemeral cluster.
 3. If you're running this from within the cloned `idp-configs-api` directory, run `make bonfire-config-github` to generate the bonfire config.yml. But if you're in a separate directory, edit the bonfire config (`~/.config/bonfire/config.yaml`) with the contents of `default_config.yaml.github.example`.
 4. After successfully reserving a namespace (eg. ephemeral-10), use this namespace to deploy the app:
-    * If you're within the idp-cnfigs-api directory:
+    * If you're within the `idp-configs-api` directory:
       ```
       make deploy-app NAMESPACE=<reserved_ephemeral_namespace>
       ```
-      Otherwise:
+      Otherwise run:
       ```
-      bonfire deploy idp-configs -n <reserved-ephemeral-namespace>
+      bonfire deploy idp-configs -n <reserved_ephemeral_namespace>
       ```
-    * Now the application should be running. You can check this with `oc get pods -n <reserved_ephemeral_namespace>` You can test this by port-forwarding the app in one terminal and running a curl command in another 
+    * Now the application should be running. You can check the pod with `oc get pods -n <reserved_ephemeral_namespace>` You can test by port-forwarding the app in one terminal and running a curl command in another 
       ```
         oc port-forward service/idp-configs-api-service 8000:8000 -n <reserved_ephemeral_namespace>
       ```
