@@ -68,7 +68,7 @@ eval $(minikube -p minikube docker-env)
 ```
 make docker-build
 ```
-7. Create Bonfire configuration. To deploy from your local repository run the following:
+5. Create Bonfire configuration. To deploy from your local repository run the following:
 ```
 make bonfire-config-local
 ```
@@ -78,15 +78,15 @@ Bonfire can also deploy from GitHub. Running the following command will setup th
 ```
 make bonfire-config-github
 ```
-8. Setup a test namespace for deployment.
+6. Setup a test namespace for deployment.
 ```
 make create-ns NAMESPACE=test
 ```
-9. Deploy a Clowder environment (*ClowdEnviroment*) to the namespace with bonfire.
+7. Deploy a Clowder environment (*ClowdEnviroment*) to the namespace with bonfire.
 ```
 make deploy-env NAMESPACE=test
 ```
-10. Deploy the application to the namespace.
+8. Deploy the application to the namespace.
 ```
 make deploy-app NAMESPACE=test
 ```
