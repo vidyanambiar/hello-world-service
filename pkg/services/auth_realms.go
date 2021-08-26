@@ -185,7 +185,13 @@ func UpdateAuthRealmByID(w http.ResponseWriter, r *http.Request) {
 
 	// Save updates to the DB
 	if err := db.DB.Save(&incoming).Error; err != nil {
-		errors.RespondWithInternalServerError(err.Error(), w)
+		if (strings.Contains(strings.ToLower(err.Error()), "unique constraint")) {	// The error message looks a little different between sqlite and postgres 
+			// Unique constraint violated (return 409)
+			errors.RespondWithConflict("Error updating record in the DB: " + err.Error(), w)			
+		} else {
+			// Error updating the DB		
+			errors.RespondWithInternalServerError("Error updating record in the DB: " + err.Error(), w)
+		}
 		return
 	}
 
