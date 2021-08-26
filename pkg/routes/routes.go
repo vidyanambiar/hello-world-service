@@ -12,6 +12,7 @@ func MakeRouterForAuthRealms(sub chi.Router) {
 	sub.Get("/", services.GetAuthRealmsForAccount)
 	sub.Post("/", services.CreateAuthRealmForAccount)
 	sub.Route("/{id}", func(r chi.Router) {
+		r.Use(services.AuthRealmCtx)
 		r.Get("/", services.GetAuthRealmByID)
 		r.Put("/", services.UpdateAuthRealmByID)
 		r.Delete("/", services.DeleteAuthRealmByID)
