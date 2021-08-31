@@ -1,6 +1,54 @@
 components:
   schemas:
+    v1.AuthRealm:
+      properties:
+        account:
+          type: string
+        created_at:
+          format: date-time
+          type: string
+        custom_resource:
+          format: byte
+          type: string
+        deleted_at: {}
+        id:
+          minimum: 0
+          type: integer
+        name:
+          type: string
+        updated_at:
+          format: date-time
+          type: string
+      type: object
+    v1.AuthRealmBody:
+      properties:
+        account:
+          type: string
+        custom_resource:
+          format: byte
+          type: string
+        name:
+          type: string
+      type: object
     v1.BadRequest:
+      properties:
+        Code:
+          type: string
+        Status:
+          type: integer
+        Title:
+          type: string
+      type: object
+    v1.Conflict:
+      properties:
+        Code:
+          type: string
+        Status:
+          type: integer
+        Title:
+          type: string
+      type: object
+    v1.Forbidden:
       properties:
         Code:
           type: string
@@ -32,6 +80,223 @@ info:
   version: 1.0.0
 openapi: 3.0.0
 paths:
+  /api/idp-configs-api/v0/auth_realms:
+    get:
+      operationId: listAuthRealms
+      description: Returns auth realms (IDP configurations) for the requestor's account
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/v1.AuthRealm'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1.BadRequest'
+          description: The request sent couldn't be processed.          
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1.InternalServerError'
+          description: There was an internal server error. 
+    post:
+      operationId: createAuthRealm
+      description: Create an auth realm for the requestor's account
+      requestBody:
+        description: name, custom_resource object and optionally the account associated with the auth realm
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/v1.AuthRealmBody'
+              required:
+                - name
+                - custom_resource
+            example:
+              name: Auth-Realm-001
+              custom_resource:
+                apiVersion: identityconfig.identitatem.io/v1alpha1
+                kind: authrealm
+                metadata:
+                  name: Auth-Realm-001
+                spec:
+                  placement: {}
+                  identityProviders: {}
+              account: 0368000
+        required: true      
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1.AuthRealm'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1.BadRequest'
+          description: The request sent couldn't be processed.          
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1.Conflict'
+          description: There was a conflict in creating the record. Auth realms within the same account must have a unique name.                 
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1.InternalServerError'
+          description: There was an internal server error.
+  /api/idp-configs-api/v0/auth_realms/{id}:
+    get:
+      operationId: getAuthRealm
+      description: Returns auth realm based on the provided auth realm ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: AuthRealmID (ID for an auth realm within the requestor's account)
+          schema:
+            type : integer      
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1.AuthRealmBody'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1.BadRequest'
+          description: The request sent couldn't be processed.
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1.Forbidden'
+          description: The requestor's account does not match the auth realm account          
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1.NotFound'
+          description: The auth realm was not found.              
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1.InternalServerError'
+          description: There was an internal server error. 
+    put:
+      operationId: updateAuthRealm
+      description: Update an auth realm for the requestor's account
+      requestBody:
+        description: name, custom_resource object and optionally the account associated with the auth realm
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/v1.AuthRealmBody'
+              required:
+                - name
+                - custom_resource
+            example:
+              name: Auth-Realm-001
+              custom_resource:
+                apiVersion: identityconfig.identitatem.io/v1alpha1
+                kind: authrealm
+                metadata:
+                  name: Auth-Realm-001
+                spec:
+                  placement: {}
+                  identityProviders: {}
+        required: true      
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1.AuthRealm'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1.BadRequest'
+          description: The request sent couldn't be processed.
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1.Forbidden'
+          description: The requestor's account does not match the auth realm account          
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1.NotFound'
+          description: The auth realm was not found.               
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1.Conflict'
+          description: There was a conflict in creating the record. Auth realms within the same account must have a unique name.                 
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1.InternalServerError'
+          description: There was an internal server error.
+    delete:
+      operationId: deleteAuthRealm
+      description: Delete an auth realm in the requestor's account
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: AuthRealmID (ID for an auth realm within the requestor's account)
+          schema:
+            type : integer      
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1.AuthRealmBody'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1.BadRequest'
+          description: The request sent couldn't be processed.
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1.Forbidden'
+          description: The requestor's account does not match the auth realm account          
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1.NotFound'
+          description: The auth realm was not found.              
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1.InternalServerError'
+          description: There was an internal server error.           
   /api/idp-configs-api/v0/ping:
     get:
       operationId: helloWorld

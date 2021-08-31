@@ -19,5 +19,12 @@ type AuthRealm struct  {
 	BaseModel
 	Name		string	`json:"name" gorm:"index:idx_name,unique"`	// Enforce uniqueness on the name within an account
 	Account 	string  `json:"account" gorm:"index:idx_name,unique"` // Enforce uniqueness on the name within an account
-	CustomResource	datatypes.JSON `json:"custom_resource,omitempty"`
+	CustomResource	datatypes.JSON `json:"custom_resource,omitempty"`	
+}
+
+// For OpenAPI spec
+type AuthRealmBody struct {
+	Name		string	`json:"name" gorm:"index:idx_name,unique"`	// Enforce uniqueness on the name within an account
+	Account 	string  `json:"account" gorm:"index:idx_name,unique"` // Enforce uniqueness on the name within an account
+	CustomResource	datatypes.JSON `json:"custom_resource,omitempty"`	
 }

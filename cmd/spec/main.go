@@ -11,12 +11,25 @@ import (
 	"github.com/getkin/kin-openapi/openapi3gen"
 	"github.com/ghodss/yaml"
 	"github.com/identitatem/idp-configs-api/pkg/errors"
+	"github.com/identitatem/idp-configs-api/pkg/models"
 )
 
 // Used to generate openapi yaml file for components.
 func main() {
 	components := openapi3.NewComponents()
 	components.Schemas = make(map[string]*openapi3.SchemaRef)
+
+	authRealm, _, err := openapi3gen.NewSchemaRefForValue(&models.AuthRealm{})
+	if err != nil {
+		panic(err)
+	}
+	components.Schemas["v1.AuthRealm"] = authRealm	
+
+	authRealmBody, _, err := openapi3gen.NewSchemaRefForValue(&models.AuthRealmBody{})
+	if err != nil {
+		panic(err)
+	}
+	components.Schemas["v1.AuthRealmBody"] = authRealmBody		
 
 	internalServerError, _, err := openapi3gen.NewSchemaRefForValue(&errors.InternalServerError{})
 	if err != nil {
@@ -35,6 +48,18 @@ func main() {
 		panic(err)
 	}
 	components.Schemas["v1.NotFound"] = notFound
+
+	conflict, _, err := openapi3gen.NewSchemaRefForValue(&errors.Conflict{})
+	if err != nil {
+		panic(err)
+	}
+	components.Schemas["v1.Conflict"] = conflict	
+
+	forbidden, _, err := openapi3gen.NewSchemaRefForValue(&errors.Forbidden{})
+	if err != nil {
+		panic(err)
+	}
+	components.Schemas["v1.Forbidden"] = forbidden	
 
 	type Swagger struct {
 		Components openapi3.Components `json:"components,omitempty" yaml:"components,omitempty"`
